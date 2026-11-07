@@ -25,7 +25,7 @@ struct Level {
 // Coordenadas de 0 a 5 dentro do tabuleiro 6x6.
 // Carro 0 = vermelho, sempre na linha 2, horizontal.
 // Cada veiculo do nivel tem uma cor diferente (ids 0..7, ver palette()).
-// Niveis pensados para criancas: 4 faceis e 2 "desafios" um pouco mais dificeis.
+// Niveis pensados para criancas: tutorial, 1 facil, 2 medios e 2 "desafios".
 // Gerados e validados por busca exaustiva (BFS), sem sobreposicao - o otimo esta em "optimal".
 const Level levels[LEVEL_COUNT] PROGMEM = {
   // Nivel 1 - Tutorial (2 movimentos)
@@ -43,15 +43,7 @@ const Level levels[LEVEL_COUNT] PROGMEM = {
     {4, 3, 3, true, 4},  // roxo
     {0, 2, 3, true, 5},  // ciano
   }},
-  // Nivel 3 - Facil (4 movimentos)
-  {5, 4, {
-    {2, 0, 2, true, 0},  // vermelho
-    {2, 4, 2, false, 1}, // azul
-    {5, 0, 2, true, 2},  // verde
-    {2, 2, 2, false, 3}, // amarelo
-    {2, 5, 3, false, 4}, // roxo
-  }},
-  // Nivel 4 - Facil (5 movimentos)
+  // Nivel 3 - Medio (5 movimentos)
   {6, 5, {
     {2, 0, 2, true, 0},  // vermelho
     {1, 2, 2, false, 1}, // azul
@@ -59,6 +51,15 @@ const Level levels[LEVEL_COUNT] PROGMEM = {
     {2, 3, 3, false, 5}, // ciano
     {2, 4, 3, false, 6}, // rosa
     {2, 5, 3, false, 7}, // laranja
+  }},
+  // Nivel 4 - Medio (6 movimentos)
+  {6, 6, {
+    {2, 0, 2, true, 0},  // vermelho
+    {1, 2, 2, false, 1}, // azul
+    {2, 4, 3, false, 4}, // roxo
+    {0, 3, 3, false, 5}, // ciano
+    {2, 5, 3, false, 6}, // rosa
+    {3, 1, 3, true, 7},  // laranja
   }},
   // Nivel 5 - Desafio (7 movimentos)
   {7, 7, {

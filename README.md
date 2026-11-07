@@ -4,7 +4,7 @@ Projeto de implementação física do jogo **Hora do Rush (Rush Hour)**, utiliza
 
 O objetivo é retirar o carro vermelho de um estacionamento, movimentando os outros veículos para liberar sua passagem. Cada veículo só pode se mover na direção correspondente à sua orientação, respeitando os limites do tabuleiro e a posição dos demais carros.
 
-O projeto possui **seis níveis** (um tutorial, três fáceis e dois "desafios" um pouco mais difíceis), com progressão após a conclusão de cada fase.
+O projeto possui **seis níveis** (um tutorial, um fácil, dois médios e dois "desafios" um pouco mais difíceis), com progressão após a conclusão de cada fase.
 
 Ele também pode ser jogado pelo **Modo Arduino** do site [web-rush-hour](https://github.com/kamilunelli/web-rush-hour): o site conecta ao Arduino pela USB (Web Serial), lê o controle Xbox, espelha o tabuleiro físico na tela e executa a solução ótima do algoritmo **A\*** movendo os carros de verdade na matriz (seção 16).
 
@@ -605,14 +605,14 @@ Movimentos bloqueados não devem alterar a posição do veículo.
 
 ## 15. Níveis
 
-O projeto contém seis níveis, pensados para crianças: os quatro primeiros são tranquilos e só os dois últimos são um pouco mais difíceis.
+O projeto contém seis níveis, pensados para crianças: a dificuldade sobe aos poucos e só os dois últimos são um pouco mais difíceis.
 
 | Nível | Dificuldade | Veículos | Solução ótima |
 |---|---|---|---|
 | 1 | Tutorial | 4 | 2 movimentos |
 | 2 | Fácil | 5 | 3 movimentos |
-| 3 | Fácil | 5 | 4 movimentos |
-| 4 | Fácil | 6 | 5 movimentos |
+| 3 | Médio | 6 | 5 movimentos |
+| 4 | Médio | 6 | 6 movimentos |
 | 5 | Desafio | 7 | 7 movimentos |
 | 6 | Desafio | 7 | 8 movimentos |
 
@@ -737,7 +737,7 @@ Controle Xbox ──> Navegador (Chrome/Edge) ──Web Serial──> Arduino Un
 Na tela é possível:
 
 - **Escolher o nível** (1 a 6).
-- **Reiniciar** e **Cancelar** o nível. Cancelar também interrompe o Resolver.
+- **Reiniciar** o nível ou voltar para a **Fase 1** (os dois também interrompem o Resolver).
 - **Resolver**: o backend calcula a solução ótima (A\*) **a partir da posição atual** e o site executa os movimentos no Arduino, um carro de cada vez.
 - **Dica**: executa só o próximo movimento da solução ótima.
 - Ver o **espelho do tabuleiro físico**, com o carro em foco piscando, além do histórico do que foi movido, dos movimentos, do ótimo e das vitórias.
