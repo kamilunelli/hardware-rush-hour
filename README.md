@@ -4,7 +4,7 @@ Projeto de implementação física do jogo **Hora do Rush (Rush Hour)**, utiliza
 
 O objetivo é retirar o carro vermelho de um estacionamento, movimentando os outros veículos para liberar sua passagem. Cada veículo só pode se mover na direção correspondente à sua orientação, respeitando os limites do tabuleiro e a posição dos demais carros.
 
-O projeto possui **seis níveis** (tutorial, fácil, dois médios e dois difíceis), com progressão após a conclusão de cada fase.
+O projeto possui **seis níveis** (um tutorial, três fáceis e dois "desafios" um pouco mais difíceis), com progressão após a conclusão de cada fase.
 
 Ele também pode ser jogado pelo **Modo Arduino** do site [web-rush-hour](https://github.com/kamilunelli/web-rush-hour): o site conecta ao Arduino pela USB (Web Serial), lê o controle Xbox, espelha o tabuleiro físico na tela e executa a solução ótima do algoritmo **A\*** movendo os carros de verdade na matriz (seção 16).
 
@@ -605,20 +605,20 @@ Movimentos bloqueados não devem alterar a posição do veículo.
 
 ## 15. Níveis
 
-O projeto contém seis níveis, pensados para crianças: difíceis, mas não impossíveis.
+O projeto contém seis níveis, pensados para crianças: os quatro primeiros são tranquilos e só os dois últimos são um pouco mais difíceis.
 
 | Nível | Dificuldade | Veículos | Solução ótima |
 |---|---|---|---|
 | 1 | Tutorial | 4 | 2 movimentos |
-| 2 | Fácil | 8 | 4 movimentos |
-| 3 | Médio | 8 | 8 movimentos |
-| 4 | Médio | 8 | 10 movimentos |
-| 5 | Difícil | 8 | 13 movimentos |
-| 6 | Difícil | 8 | 15 movimentos |
+| 2 | Fácil | 5 | 3 movimentos |
+| 3 | Fácil | 5 | 4 movimentos |
+| 4 | Fácil | 6 | 5 movimentos |
+| 5 | Desafio | 7 | 7 movimentos |
+| 6 | Desafio | 7 | 8 movimentos |
 
 A "solução ótima" usa a mesma regra do jogo web: deslizar um carro várias casas seguidas conta como 1 movimento. Os mapas foram gerados por computador e o ótimo de cada um foi conferido por busca exaustiva (BFS) e pelo solver A\* do web-rush-hour.
 
-Cada nível tem no máximo 8 veículos, um de cada cor (vermelho, azul, verde, amarelo, roxo, ciano, rosa e laranja), para que nenhum carro se confunda com outro na matriz.
+Cada nível tem no máximo 8 veículos, nunca sobrepostos, um de cada cor (vermelho, azul, verde, amarelo, roxo, ciano, rosa e laranja), para que nenhum carro se confunda com outro na matriz.
 
 Os níveis são definidos no código Arduino, por meio da estrutura `Level`, gravada na memória de programa (`PROGMEM`).
 

@@ -25,69 +25,60 @@ struct Level {
 // Coordenadas de 0 a 5 dentro do tabuleiro 6x6.
 // Carro 0 = vermelho, sempre na linha 2, horizontal.
 // Cada veiculo do nivel tem uma cor diferente (ids 0..7, ver palette()).
-// Niveis gerados e validados por busca exaustiva (BFS) - o otimo esta em "optimal".
+// Niveis pensados para criancas: 4 faceis e 2 "desafios" um pouco mais dificeis.
+// Gerados e validados por busca exaustiva (BFS), sem sobreposicao - o otimo esta em "optimal".
 const Level levels[LEVEL_COUNT] PROGMEM = {
   // Nivel 1 - Tutorial (2 movimentos)
   {4, 2, {
     {2, 0, 2, true, 0},  // vermelho
     {1, 4, 2, false, 1}, // azul
-    {4, 1, 2, true, 2},  // verde
+    {4, 2, 2, true, 2},  // verde
     {3, 1, 3, false, 4}, // roxo
   }},
-  // Nivel 2 - Facil (4 movimentos)
-  {8, 4, {
+  // Nivel 2 - Facil (3 movimentos)
+  {5, 3, {
     {2, 0, 2, true, 0},  // vermelho
-    {1, 1, 2, true, 1},  // azul
-    {0, 3, 2, true, 2},  // verde
-    {2, 2, 2, false, 3}, // amarelo
-    {2, 4, 3, false, 4}, // roxo
-    {1, 3, 3, true, 5},  // ciano
-    {2, 5, 3, false, 6}, // rosa
-    {3, 0, 3, false, 7}, // laranja
-  }},
-  // Nivel 3 - Medio (8 movimentos)
-  {8, 8, {
-    {2, 0, 2, true, 0},  // vermelho
-    {3, 2, 2, true, 1},  // azul
-    {2, 5, 2, false, 2}, // verde
-    {1, 2, 2, false, 3}, // amarelo
-    {0, 0, 3, true, 4},  // roxo
-    {4, 1, 3, true, 5},  // ciano
-    {0, 3, 3, false, 6}, // rosa
-    {5, 1, 3, true, 7},  // laranja
-  }},
-  // Nivel 4 - Medio (10 movimentos)
-  {8, 10, {
-    {2, 0, 2, true, 0},  // vermelho
-    {1, 3, 2, false, 1}, // azul
-    {0, 2, 2, true, 2},  // verde
-    {4, 0, 2, true, 3},  // amarelo
+    {1, 2, 2, false, 1}, // azul
+    {4, 2, 2, false, 2}, // verde
     {4, 3, 3, true, 4},  // roxo
-    {2, 2, 3, false, 5}, // ciano
-    {1, 5, 3, false, 6}, // rosa
+    {0, 2, 3, true, 5},  // ciano
+  }},
+  // Nivel 3 - Facil (4 movimentos)
+  {5, 4, {
+    {2, 0, 2, true, 0},  // vermelho
+    {2, 4, 2, false, 1}, // azul
+    {5, 0, 2, true, 2},  // verde
+    {2, 2, 2, false, 3}, // amarelo
+    {2, 5, 3, false, 4}, // roxo
+  }},
+  // Nivel 4 - Facil (5 movimentos)
+  {6, 5, {
+    {2, 0, 2, true, 0},  // vermelho
+    {1, 2, 2, false, 1}, // azul
+    {3, 0, 3, false, 4}, // roxo
+    {2, 3, 3, false, 5}, // ciano
+    {2, 4, 3, false, 6}, // rosa
+    {2, 5, 3, false, 7}, // laranja
+  }},
+  // Nivel 5 - Desafio (7 movimentos)
+  {7, 7, {
+    {2, 0, 2, true, 0},  // vermelho
+    {0, 3, 2, true, 1},  // azul
+    {4, 0, 2, true, 2},  // verde
+    {2, 2, 3, false, 4}, // roxo
+    {2, 5, 3, false, 5}, // ciano
+    {0, 0, 3, true, 6},  // rosa
     {5, 2, 3, true, 7},  // laranja
   }},
-  // Nivel 5 - Dificil (13 movimentos)
-  {8, 13, {
+  // Nivel 6 - Desafio (8 movimentos)
+  {7, 8, {
     {2, 0, 2, true, 0},  // vermelho
-    {4, 4, 2, true, 1},  // azul
-    {0, 0, 2, false, 2}, // verde
-    {4, 3, 2, false, 3}, // amarelo
-    {5, 0, 3, true, 4},  // roxo
-    {2, 2, 3, false, 5}, // ciano
-    {1, 5, 3, false, 6}, // rosa
-    {1, 1, 3, true, 7},  // laranja
-  }},
-  // Nivel 6 - Dificil (15 movimentos)
-  {8, 15, {
-    {2, 0, 2, true, 0},  // vermelho
-    {3, 1, 2, false, 1}, // azul
-    {0, 1, 2, true, 2},  // verde
-    {4, 3, 2, true, 3},  // amarelo
-    {1, 3, 3, false, 4}, // roxo
+    {3, 1, 2, true, 1},  // azul
+    {4, 2, 2, false, 2}, // verde
+    {5, 3, 3, true, 4},  // roxo
     {3, 0, 3, false, 5}, // ciano
-    {2, 5, 3, false, 6}, // rosa
-    {5, 1, 3, true, 7},  // laranja
+    {2, 4, 3, false, 6}, // rosa
+    {0, 0, 3, true, 7},  // laranja
   }},
 };
 
