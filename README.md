@@ -4,7 +4,9 @@ Projeto de implementação física do jogo **Hora do Rush (Rush Hour)**, utiliza
 
 O objetivo é retirar o carro vermelho de um estacionamento, movimentando os outros veículos para liberar sua passagem. Cada veículo só pode se mover na direção correspondente à sua orientação, respeitando os limites do tabuleiro e a posição dos demais carros.
 
-O projeto possui **cinco níveis**, com progressão após a conclusão de cada fase.
+O projeto possui **seis níveis** (tutorial, fácil, dois médios e dois difíceis), com progressão após a conclusão de cada fase.
+
+Ele também pode ser jogado pelo **Modo Arduino** do site [web-rush-hour](https://github.com/kamilunelli/web-rush-hour): o site conecta ao Arduino pela USB (Web Serial), lê o controle Xbox, espelha o tabuleiro físico na tela e executa a solução ótima do algoritmo **A\*** movendo os carros de verdade na matriz (seção 16).
 
 ## 1. Sobre o projeto
 
@@ -20,7 +22,7 @@ Cada veículo possui uma cor diferente para facilitar sua identificação.
 
 - Tabuleiro jogável de 6×6 posições.
 
-- Cinco níveis com diferentes configurações de veículos.
+- Seis níveis com dificuldade crescente, todos validados por busca exaustiva.
 
 - Movimentação de carros horizontais e verticais.
 
@@ -32,7 +34,9 @@ Cada veículo possui uma cor diferente para facilitar sua identificação.
 
 - Impedimento de movimentos fora do tabuleiro.
 
-- Contagem de movimentos realizados.
+- Contagem de movimentos realizados (andar várias casas seguidas com o mesmo carro conta como 1 movimento, como no jogo web).
+
+- Contagem de vitórias desde que o Arduino foi ligado.
 
 - Identificação da vitória ao liberar o carro vermelho.
 
@@ -445,7 +449,7 @@ O terminal deverá exibir mensagens semelhantes a:
 
 ```text
 
-HORA DO RUSH - 5 NIVEIS (6x6)
+HORA DO RUSH - 6 NIVEIS (6x6)
 
 Direcional: movimentar carro
 
@@ -601,19 +605,32 @@ Movimentos bloqueados não devem alterar a posição do veículo.
 
 ## 15. Níveis
 
-O projeto contém cinco níveis.
+O projeto contém seis níveis, pensados para crianças: difíceis, mas não impossíveis.
 
-Os níveis são definidos no código Arduino, por meio da estrutura `Level`.
+| Nível | Dificuldade | Veículos | Solução ótima |
+|---|---|---|---|
+| 1 | Tutorial | 4 | 2 movimentos |
+| 2 | Fácil | 8 | 4 movimentos |
+| 3 | Médio | 8 | 8 movimentos |
+| 4 | Médio | 8 | 10 movimentos |
+| 5 | Difícil | 8 | 13 movimentos |
+| 6 | Difícil | 8 | 15 movimentos |
 
-Cada nível informa a quantidade de veículos e suas posições iniciais.
+A "solução ótima" usa a mesma regra do jogo web: deslizar um carro várias casas seguidas conta como 1 movimento. Os mapas foram gerados por computador e o ótimo de cada um foi conferido por busca exaustiva (BFS) e pelo solver A\* do web-rush-hour.
+
+Cada nível tem no máximo 8 veículos, um de cada cor (vermelho, azul, verde, amarelo, roxo, ciano, rosa e laranja), para que nenhum carro se confunda com outro na matriz.
+
+Os níveis são definidos no código Arduino, por meio da estrutura `Level`, gravada na memória de programa (`PROGMEM`).
+
+Cada nível informa a quantidade de veículos, a solução ótima e as posições iniciais.
 
 A variável `levelIndex` identifica o nível atual.
 
 Ao concluir um nível, o Arduino aguarda o jogador pressionar **A** para carregar o próximo.
 
-Após o quinto nível, o programa informa que todos os níveis foram concluídos.
+Após o sexto nível, o programa informa que todos os níveis foram concluídos.
 
-Para jogar novamente, pressione **Y** para reiniciar o quinto nível ou reinicie o Arduino para retornar ao primeiro.
+Para jogar novamente, pressione **Y** para reiniciar o sexto nível, escolha um nível no site ou reinicie o Arduino para retornar ao primeiro.
 
 ## 16. Comunicação entre Python e Arduino
 
@@ -681,7 +698,51 @@ O Arduino recebe esses caracteres e executa a ação correspondente.
 
 | S | Baixo |
 
-A comunicação utiliza uma velocidade de 9600 baud.
+| L1 a L6 | Carregar o nível indicado |
+
+| C0 a C7 | Selecionar o carro de índice indicado (usado pelo Resolver) |
+
+| Q | Cancelar o nível (tabuleiro vazio) |
+
+| ? | Pedir o estado atual |
+
+A comunicação utiliza uma velocidade de **115200 baud** (o `controle.py` e o site já usam esse valor).
+
+### Mensagens enviadas pelo Arduino
+
+Além das mensagens de texto (`NIVEL 1/6`, `VITORIA!` etc.), o Arduino envia uma linha de estado sempre que algo muda. O site usa essa linha para espelhar o tabuleiro:
+
+```text
+@HELLO 2 6
+@S 3 5 8 1 1 2 1 202H0 322H1 252V2 122V3 003H4 413H5 033V6 513H7
+```
+
+`@S <nível> <movimentos> <ótimo> <vitórias> <status> <carro atual> <selecionado> <carros...>`. O status é 0 = sem nível, 1 = jogando, 2 = venceu e 3 = todos concluídos. Cada carro tem 5 caracteres: linha, coluna, tamanho, `H`/`V` e cor. O `controle.py` ignora as linhas que começam com `@`.
+
+### Jogar pelo site (Modo Arduino)
+
+Em vez do `controle.py`, é possível usar o site [web-rush-hour](https://github.com/kamilunelli/web-rush-hour):
+
+```text
+Controle Xbox ──> Navegador (Chrome/Edge) ──Web Serial──> Arduino Uno ──> Matriz LED
+                        │
+                        └── /solve (backend A*) ── solução ótima
+```
+
+1. Grave o `HoraDoRush.ino` no Arduino e **feche o Arduino IDE e o `controle.py`**, porque só um programa pode usar a porta COM por vez.
+2. Abra o site no **Google Chrome** ou no **Microsoft Edge** do computador. A Web Serial não funciona no Firefox nem no celular.
+3. Clique em **MODO ARDUINO** e depois em **CONECTAR ARDUINO**, e escolha a porta do Arduino.
+4. Aperte qualquer botão do controle Xbox para o navegador reconhecê-lo. O teclado também funciona: setas, `A`/Enter, `X` e `Y`.
+
+Na tela é possível:
+
+- **Escolher o nível** (1 a 6).
+- **Reiniciar** e **Cancelar** o nível. Cancelar também interrompe o Resolver.
+- **Resolver**: o backend calcula a solução ótima (A\*) **a partir da posição atual** e o site executa os movimentos no Arduino, um carro de cada vez.
+- **Dica**: executa só o próximo movimento da solução ótima.
+- Ver o **espelho do tabuleiro físico**, com o carro em foco piscando, além do histórico do que foi movido, dos movimentos, do ótimo e das vitórias.
+
+O botão Resolver precisa do backend do site no ar. Sem internet, rode o web-rush-hour localmente com `docker compose up` e abra `http://localhost:3000`.
 
 ## 17. Problemas comuns e soluções
 
@@ -799,7 +860,7 @@ No código, o brilho é configurado por:
 
 ```cpp
 
-leds.setBrightness(8);
+leds.setBrightness(20);
 
 ```
 
@@ -847,17 +908,9 @@ O Arduino executa a lógica do jogo e controla a matriz, mas não realiza direta
 
 Entre as possíveis melhorias futuras estão:
 
-- Adicionar mais níveis.
-
-- Implementar seleção visual de níveis.
-
-- Adicionar um indicador de movimentos.
-
 - Implementar um sistema de pontuação.
 
 - Armazenar o progresso do jogador.
-
-- Criar uma interface para visualizar o nível atual no computador.
 
 - Utilizar uma fonte de alimentação dedicada para a matriz.
 
