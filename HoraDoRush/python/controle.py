@@ -3,7 +3,8 @@ import time
 import pygame
 import serial
 
-PORTA = 'COM5'  
+PORTA = 'COM5'
+VELOCIDADE = 115200  # deve ser igual ao Serial.begin() do HoraDoRush.ino
 
 pygame.init()
 pygame.joystick.init()
@@ -16,10 +17,10 @@ if pygame.joystick.get_count() == 0:
 controle = pygame.joystick.Joystick(0)
 controle.init()
 
-arduino = serial.Serial(PORTA, 9600, timeout=0.05)
+arduino = serial.Serial(PORTA, VELOCIDADE, timeout=0.05)
 time.sleep(2)  # Arduino Uno reinicia ao abrir a porta serial
 
-print('HORA DO RUSH - 5 NIVEIS (6x6)')
+print('HORA DO RUSH - 6 NIVEIS (6x6)')
 print('Direcional: movimentar carro')
 print('A: selecionar / proximo nivel')
 print('X: proximo carro')
@@ -57,12 +58,13 @@ try:
                     arduino.write(b'Y')
                     print('Reiniciando nivel')
 
-        if arduino.in_waiting:
+        while arduino.in_waiting:
             mensagem = arduino.readline().decode(
                 'utf-8', errors='replace'
             ).strip()
 
-            if mensagem:
+            # Linhas com "@" sao do protocolo do site (Modo Arduino).
+            if mensagem and not mensagem.startswith('@'):
                 print(mensagem)
 
         time.sleep(0.01)
